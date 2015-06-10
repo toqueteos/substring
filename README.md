@@ -22,7 +22,7 @@ import (
     "fmt"
     "regexp"
 
-    "github.com/toqueteos/substring"
+    "gopkg.in/toqueteos/substring.v1"
 )
 
 func main() {
