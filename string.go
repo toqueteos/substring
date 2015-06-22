@@ -87,7 +87,7 @@ func Prefixes(pats ...string) *prefixesString {
 	}
 	return &prefixesString{t}
 }
-func (m *prefixesString) Match(s string) bool { return m.t.Contains([]byte(s)) }
+func (m *prefixesString) Match(s string) bool { return m.t.PrefixIndex([]byte(s)) >= 0 }
 func (m *prefixesString) MatchIndex(s string) int {
 	if idx := m.t.PrefixIndex([]byte(s)); idx >= 0 {
 		return idx

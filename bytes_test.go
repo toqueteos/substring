@@ -83,6 +83,11 @@ func (s *LibSuite) TestBytesAfter(c *C) {
 	c.Assert(a2.Match([]byte("_foo_bar")), Equals, true)
 	c.Assert(a2.Match([]byte("foo_nope")), Equals, false)
 	c.Assert(a2.Match([]byte("qux")), Equals, false)
+	a3 := BytesAfter("foo", BytesPrefixes("bar", "qux"))
+	c.Assert(a3.Match([]byte("foobar")), Equals, true)
+	c.Assert(a3.Match([]byte("fooqux")), Equals, true)
+	c.Assert(a3.Match([]byte("foo bar")), Equals, false)
+	c.Assert(a3.Match([]byte("foo_qux")), Equals, false)
 }
 
 func (s *LibSuite) TestBytesSuffixGroup(c *C) {

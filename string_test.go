@@ -83,6 +83,11 @@ func (s *LibSuite) TestAfter(c *C) {
 	c.Assert(a2.Match("_foo_bar"), Equals, true)
 	c.Assert(a2.Match("foo_nope"), Equals, false)
 	c.Assert(a2.Match("qux"), Equals, false)
+	a3 := After("foo", Prefixes("bar", "qux"))
+	c.Assert(a3.Match("foobar"), Equals, true)
+	c.Assert(a3.Match("fooqux"), Equals, true)
+	c.Assert(a3.Match("foo bar"), Equals, false)
+	c.Assert(a3.Match("foo_qux"), Equals, false)
 }
 
 func (s *LibSuite) TestSuffixGroup(c *C) {

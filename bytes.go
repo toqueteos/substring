@@ -100,7 +100,7 @@ func BytesPrefixes(pats ...string) *prefixesBytes {
 	}
 	return &prefixesBytes{t}
 }
-func (m *prefixesBytes) Match(b []byte) bool { return m.t.Contains(b) }
+func (m *prefixesBytes) Match(b []byte) bool { return m.t.PrefixIndex(b) >= 0 }
 func (m *prefixesBytes) MatchIndex(b []byte) int {
 	if idx := m.t.PrefixIndex(b); idx >= 0 {
 		return idx
