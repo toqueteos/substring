@@ -1,16 +1,18 @@
-# substring [![Build Status](https://travis-ci.org/toqueteos/substring.png?branch=master)](https://travis-ci.org/toqueteos/substring) [![GoDoc](http://godoc.org/github.com/toqueteos/substring?status.png)](http://godoc.org/github.com/toqueteos/substring) [![GitHub release](https://img.shields.io/github/release/toqueteos/substring.svg)](https://github.com/toqueteos/substring/releases)
+# substring [![Build Status](https://travis-ci.org/toqueteos/substring.png?branch=master)](https://travis-ci.org/toqueteos/substring) [![GoDoc](http://godoc.org/github.com/toqueteos/substring?status.png)](http://godoc.org/github.com/toqueteos/substring)
 
-Simple and composable alternative to [regexp](http://golang.org/pkg/regexp/) package for fast substring searches.
+Very fast **one-time string searches** in Go. Simple and composable.
+
+Interop with [regexp](http://golang.org/pkg/regexp/) for backwards compatibility (easy migration from your current system to `substring`).
 
 ## Installation
 
-The recommended way to install substring
+The recommended way to install substring is by using `go get`:
 
 ```
 go get -t gopkg.in/toqueteos/substring.v1
 ```
 
-The `-t` flag is for fetching [gocheck](https://gopkg.in/check.v1), required for tests and benchmarks.
+The `-t` flag is for fetching test dependencies ([gocheck](https://gopkg.in/check.v1)).
 
 ## Examples
 
