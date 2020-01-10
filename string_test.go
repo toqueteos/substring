@@ -1,111 +1,129 @@
 package substring
 
-import . "gopkg.in/check.v1"
+import (
+	"testing"
 
-func (s *LibSuite) TestAny(c *C) {
+	"github.com/matryer/is"
+)
+
+func TestAny(t *testing.T) {
+	is := is.New(t)
+
 	a := Any("foo") // search s in foo
-	c.Assert(a.MatchIndex("f"), Equals, 1)
-	c.Assert(a.MatchIndex("foo"), Equals, 3)
-	c.Assert(a.MatchIndex("foobar"), Equals, -1)
-	c.Assert(a.MatchIndex("p"), Equals, -1)
+	is.Equal(a.MatchIndex("f"), 1)
+	is.Equal(a.MatchIndex("foo"), 3)
+	is.Equal(a.MatchIndex("foobar"), -1)
+	is.Equal(a.MatchIndex("p"), -1)
 }
 
-func (s *LibSuite) TestHas(c *C) {
+func TestHas(t *testing.T) {
+	is := is.New(t)
+
 	h := Has("foo") // search foo in s
-	c.Assert(h.MatchIndex("foo"), Equals, 3)
-	c.Assert(h.MatchIndex("foobar"), Equals, 3)
-	c.Assert(h.MatchIndex("f"), Equals, -1)
+	is.Equal(h.MatchIndex("foo"), 3)
+	is.Equal(h.MatchIndex("foobar"), 3)
+	is.Equal(h.MatchIndex("f"), -1)
 }
 
-func (s *LibSuite) TestPrefix(c *C) {
+func TestPrefix(t *testing.T) {
+	is := is.New(t)
+
 	p := Prefix("foo")
-	c.Assert(p.Match("foo"), Equals, true)
-	c.Assert(p.Match("foobar"), Equals, true)
-	c.Assert(p.Match("barfoo"), Equals, false)
-	c.Assert(p.Match(" foo"), Equals, false)
-	c.Assert(p.Match("bar"), Equals, false)
-	c.Assert(p.MatchIndex("foo"), Equals, 3)
-	c.Assert(p.MatchIndex("foobar"), Equals, 3)
-	c.Assert(p.MatchIndex("barfoo"), Equals, -1)
-	c.Assert(p.MatchIndex(" foo"), Equals, -1)
-	c.Assert(p.MatchIndex("bar"), Equals, -1)
+	is.True(p.Match("foo"))
+	is.True(p.Match("foobar"))
+	is.Equal(p.Match("barfoo"), false)
+	is.Equal(p.Match(" foo"), false)
+	is.Equal(p.Match("bar"), false)
+	is.Equal(p.MatchIndex("foo"), 3)
+	is.Equal(p.MatchIndex("foobar"), 3)
+	is.Equal(p.MatchIndex("barfoo"), -1)
+	is.Equal(p.MatchIndex(" foo"), -1)
+	is.Equal(p.MatchIndex("bar"), -1)
 	ps := Prefixes("foo", "barfoo")
-	c.Assert(ps.Match("foo"), Equals, true)
-	c.Assert(ps.Match("barfoo"), Equals, true)
-	c.Assert(ps.Match("qux"), Equals, false)
-	c.Assert(ps.MatchIndex("foo"), Equals, 2)
-	c.Assert(ps.MatchIndex("barfoo"), Equals, 5)
-	c.Assert(ps.MatchIndex("qux"), Equals, -1)
+	is.True(ps.Match("foo"))
+	is.True(ps.Match("barfoo"))
+	is.Equal(ps.Match("qux"), false)
+	is.Equal(ps.MatchIndex("foo"), 2)
+	is.Equal(ps.MatchIndex("barfoo"), 5)
+	is.Equal(ps.MatchIndex("qux"), -1)
 }
 
-func (s *LibSuite) TestSuffix(c *C) {
+func TestSuffix(t *testing.T) {
+	is := is.New(t)
+
 	p := Suffix("foo")
-	c.Assert(p.Match("foo"), Equals, true)
-	c.Assert(p.Match("barfoo"), Equals, true)
-	c.Assert(p.Match("foobar"), Equals, false)
-	c.Assert(p.Match("foo "), Equals, false)
-	c.Assert(p.Match("bar"), Equals, false)
-	c.Assert(p.MatchIndex("foo"), Equals, 3)
-	c.Assert(p.MatchIndex("barfoo"), Equals, 3)
-	c.Assert(p.MatchIndex("foobar"), Equals, -1)
-	c.Assert(p.MatchIndex("foo "), Equals, -1)
-	c.Assert(p.MatchIndex("bar"), Equals, -1)
+	is.True(p.Match("foo"))
+	is.True(p.Match("barfoo"))
+	is.Equal(p.Match("foobar"), false)
+	is.Equal(p.Match("foo "), false)
+	is.Equal(p.Match("bar"), false)
+	is.Equal(p.MatchIndex("foo"), 3)
+	is.Equal(p.MatchIndex("barfoo"), 3)
+	is.Equal(p.MatchIndex("foobar"), -1)
+	is.Equal(p.MatchIndex("foo "), -1)
+	is.Equal(p.MatchIndex("bar"), -1)
 	ps1 := Suffixes("foo", "foobar")
-	c.Assert(ps1.Match("foo"), Equals, true)
-	c.Assert(ps1.Match("foobar"), Equals, true)
-	c.Assert(ps1.Match("qux"), Equals, false)
-	c.Assert(ps1.MatchIndex("foo"), Equals, 2)
-	c.Assert(ps1.MatchIndex("foobar"), Equals, 5)
-	c.Assert(ps1.MatchIndex("qux"), Equals, -1)
+	is.True(ps1.Match("foo"))
+	is.True(ps1.Match("foobar"))
+	is.Equal(ps1.Match("qux"), false)
+	is.Equal(ps1.MatchIndex("foo"), 2)
+	is.Equal(ps1.MatchIndex("foobar"), 5)
+	is.Equal(ps1.MatchIndex("qux"), -1)
 	ps2 := Suffixes(".foo", ".bar", ".qux")
-	c.Assert(ps2.Match("bar.foo"), Equals, true)
-	c.Assert(ps2.Match("bar.js"), Equals, false)
-	c.Assert(ps2.Match("foo/foo.bar"), Equals, true)
-	c.Assert(ps2.Match("foo/foo.js"), Equals, false)
-	c.Assert(ps2.Match("foo/foo/bar.qux"), Equals, true)
-	c.Assert(ps2.Match("foo/foo/bar.css"), Equals, false)
+	is.True(ps2.Match("bar.foo"))
+	is.Equal(ps2.Match("bar.js"), false)
+	is.True(ps2.Match("foo/foo.bar"))
+	is.Equal(ps2.Match("foo/foo.js"), false)
+	is.True(ps2.Match("foo/foo/bar.qux"))
+	is.Equal(ps2.Match("foo/foo/bar.css"), false)
 }
 
-func (s *LibSuite) TestExact(c *C) {
+func TestExact(t *testing.T) {
+	is := is.New(t)
+
 	a := Exact("foo")
-	c.Assert(a.Match("foo"), Equals, true)
-	c.Assert(a.Match("bar"), Equals, false)
-	c.Assert(a.Match("qux"), Equals, false)
+	is.True(a.Match("foo"))
+	is.Equal(a.Match("bar"), false)
+	is.Equal(a.Match("qux"), false)
 }
 
-func (s *LibSuite) TestAfter(c *C) {
+func TestAfter(t *testing.T) {
+	is := is.New(t)
+
 	a1 := After("foo", Exact("bar"))
-	c.Assert(a1.Match("foobar"), Equals, true)
-	c.Assert(a1.Match("foo_bar"), Equals, false)
+	is.True(a1.Match("foobar"))
+	is.Equal(a1.Match("foo_bar"), false)
 	a2 := After("foo", Has("bar"))
-	c.Assert(a2.Match("foobar"), Equals, true)
-	c.Assert(a2.Match("foo_bar"), Equals, true)
-	c.Assert(a2.Match("_foo_bar"), Equals, true)
-	c.Assert(a2.Match("foo_nope"), Equals, false)
-	c.Assert(a2.Match("qux"), Equals, false)
+	is.True(a2.Match("foobar"))
+	is.True(a2.Match("foo_bar"))
+	is.True(a2.Match("_foo_bar"))
+	is.Equal(a2.Match("foo_nope"), false)
+	is.Equal(a2.Match("qux"), false)
 	a3 := After("foo", Prefixes("bar", "qux"))
-	c.Assert(a3.Match("foobar"), Equals, true)
-	c.Assert(a3.Match("fooqux"), Equals, true)
-	c.Assert(a3.Match("foo bar"), Equals, false)
-	c.Assert(a3.Match("foo_qux"), Equals, false)
+	is.True(a3.Match("foobar"))
+	is.True(a3.Match("fooqux"))
+	is.Equal(a3.Match("foo bar"), false)
+	is.Equal(a3.Match("foo_qux"), false)
 }
 
-func (s *LibSuite) TestSuffixGroup(c *C) {
+func TestSuffixGroup(t *testing.T) {
+	is := is.New(t)
+
 	sg1 := SuffixGroup(".foo", Has("bar"))
-	c.Assert(sg1.Match("bar.foo"), Equals, true)
-	c.Assert(sg1.Match("barqux.foo"), Equals, true)
-	c.Assert(sg1.Match(".foo.bar"), Equals, false)
+	is.True(sg1.Match("bar.foo"))
+	is.True(sg1.Match("barqux.foo"))
+	is.Equal(sg1.Match(".foo.bar"), false)
 	sg2 := SuffixGroup(`.foo`,
 		After(`bar`, Has("qux")),
 	)
-	c.Assert(sg2.Match("barqux.foo"), Equals, true)
-	c.Assert(sg2.Match("barbarqux.foo"), Equals, true)
-	c.Assert(sg2.Match("bar.foo"), Equals, false)
-	c.Assert(sg2.Match("foo.foo"), Equals, false)
+	is.True(sg2.Match("barqux.foo"))
+	is.True(sg2.Match("barbarqux.foo"))
+	is.Equal(sg2.Match("bar.foo"), false)
+	is.Equal(sg2.Match("foo.foo"), false)
 	sg3 := SuffixGroup(`.foo`,
 		After(`bar`, Regexp(`\d+`)),
 	)
-	c.Assert(sg3.Match("bar0.foo"), Equals, true)
-	c.Assert(sg3.Match("bar.foo"), Equals, false)
-	c.Assert(sg3.Match("bar0.qux"), Equals, false)
+	is.True(sg3.Match("bar0.foo"))
+	is.Equal(sg3.Match("bar.foo"), false)
+	is.Equal(sg3.Match("bar0.qux"), false)
 }

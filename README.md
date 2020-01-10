@@ -9,10 +9,10 @@ Interop with [regexp](http://golang.org/pkg/regexp/) for backwards compatibility
 The recommended way to install substring is by using `go get`:
 
 ```
-go get -t gopkg.in/toqueteos/substring.v1
+go get github.com/toqueteos/substring
 ```
 
-The `-t` flag is for fetching test dependencies ([gocheck](https://gopkg.in/check.v1)).
+Go Modules are supported!
 
 ## Examples
 
@@ -22,34 +22,35 @@ A basic example with two matchers:
 package main
 
 import (
-    "fmt"
-    "regexp"
+	"fmt"
+	"regexp"
 
-    "gopkg.in/toqueteos/substring.v1"
+	"github.com/toqueteos/substring/v2"
 )
 
 func main() {
-    m1 := substring.After("assets/", substring.Or(
-        substring.Has("jquery"),
-        substring.Has("angular"),
-        substring.Suffixes(".js", ".css", ".html"),
-    ))
-    fmt.Println(m1.Match("assets/angular/foo/bar")) //Prints: true
-    fmt.Println(m1.Match("assets/js/file.js"))      //Prints: true
-    fmt.Println(m1.Match("assets/style/bar.css"))   //Prints: true
-    fmt.Println(m1.Match("assets/foo/bar.html"))    //Prints: false
-    fmt.Println(m1.Match("assets/js/qux.json"))     //Prints: false
-    fmt.Println(m1.Match("core/file.html"))         //Prints: false
-    fmt.Println(m1.Match("foobar/that.jsx"))        //Prints: false
+	m1 := substring.After("assets/", substring.Or(
+		substring.Has("jquery"),
+		substring.Has("angular"),
+		substring.Suffixes(".js", ".css", ".html"),
+	))
+	fmt.Println(m1.Match("assets/angular/foo/bar")) // Prints: true
+	fmt.Println(m1.Match("assets/js/file.js"))      // Prints: true
+	fmt.Println(m1.Match("assets/style/bar.css"))   // Prints: true
+	fmt.Println(m1.Match("assets/foo/bar.html"))    // Prints: true
+	fmt.Println(m1.Match("assets/js/qux.json"))     // Prints: false
+	fmt.Println(m1.Match("core/file.html"))         // Prints: false
+	fmt.Println(m1.Match("foobar/that.jsx"))        // Prints: false
+	fmt.Println()
 
-    m2 := substring.After("vendor/", substring.Suffixes(".css", ".js", ".less"))
+	m2 := substring.After("vendor/", substring.Suffixes(".css", ".js", ".less"))
+	fmt.Println(m2.Match("foo/vendor/bar/qux.css")) // Prints: true
+	fmt.Println(m2.Match("foo/var/qux.less"))       // Prints: false
+	fmt.Println()
 
-    fmt.Println(m2.Match("foo/vendor/bar/qux.css")) //Prints: true
-    fmt.Println(m2.Match("foo/var/qux.less"))       //Prints: false
-
-    re := regexp.MustCompile(`vendor\/.*\.(css|js|less)$`)
-    fmt.Println(re.MatchString("foo/vendor/bar/qux.css")) //Prints: true
-    fmt.Println(re.MatchString("foo/var/qux.less"))       //Prints: false
+	re := regexp.MustCompile(`vendor\/.*\.(css|js|less)$`)
+	fmt.Println(re.MatchString("foo/vendor/bar/qux.css")) // Prints: true
+	fmt.Println(re.MatchString("foo/var/qux.less"))       // Prints: false
 }
 ```
 
@@ -57,26 +58,25 @@ func main() {
 
 It may vary depending on your use case but 1~2 orders of magnitude faster than `regexp` is pretty common.
 
-Test it out for yourself by running `go test -check.b`!
+Test it out for yourself by running `go test -bench .`!
 
 ```
-$ go test -check.b
-PASS: lib_test.go:18: LibSuite.BenchmarkExample1        10000000               221 ns/op
-PASS: lib_test.go:23: LibSuite.BenchmarkExample2        10000000               229 ns/op
-PASS: lib_test.go:28: LibSuite.BenchmarkExample3        10000000               216 ns/op
-PASS: lib_test.go:33: LibSuite.BenchmarkExample4        10000000               208 ns/op
-PASS: lib_test.go:38: LibSuite.BenchmarkExample5        20000000                82.1 ns/op
-PASS: lib_test.go:48: LibSuite.BenchmarkExampleRe1        500000              4136 ns/op
-PASS: lib_test.go:53: LibSuite.BenchmarkExampleRe2        500000              5222 ns/op
-PASS: lib_test.go:58: LibSuite.BenchmarkExampleRe3        500000              5116 ns/op
-PASS: lib_test.go:63: LibSuite.BenchmarkExampleRe4        500000              4020 ns/op
-PASS: lib_test.go:68: LibSuite.BenchmarkExampleRe5      10000000               226 ns/op
-OK: 10 passed
+$ go test -bench .
+pkg: github.com/toqueteos/substring
+BenchmarkExample1-16            30759529                38.4 ns/op
+BenchmarkExample2-16            26659675                40.0 ns/op
+BenchmarkExample3-16            30760317                37.7 ns/op
+BenchmarkExample4-16            31566652                36.8 ns/op
+BenchmarkExample5-16           123704845                9.70 ns/op
+BenchmarkExampleRe1-16           2739574                 436 ns/op
+BenchmarkExampleRe2-16           2494791                 480 ns/op
+BenchmarkExampleRe3-16           1681654                 713 ns/op
+BenchmarkExampleRe4-16           2205490                 540 ns/op
+BenchmarkExampleRe5-16          19673001                55.0 ns/op
 PASS
-ok      gopkg.in/toqueteos/substring.v1 23.471s
+ok      github.com/toqueteos/substring  15.016s
 ```
 
-License
--------
+## License
 
 MIT, see [LICENSE](LICENSE)
